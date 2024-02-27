@@ -27,9 +27,10 @@ namespace LethalLevelLoader
             {
                 if (routeNode != null)
                 {
-                    routePrice = routeNode.itemCost;
-                    routeConfirmNode.itemCost = routePrice;
-                    return (routeNode.itemCost);
+                    return AdvancedCompany.Lib.Moons.GetMoonPrice(routeConfirmNode.buyRerouteToMoon);
+//                    routePrice = routeNode.itemCost;
+//                    routeConfirmNode.itemCost = routePrice;
+//                    return (routeNode.itemCost);
                 }
                 else
                 {

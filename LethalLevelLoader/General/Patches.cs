@@ -3,11 +3,12 @@ using DunGen;
 using DunGen.Graph;
 using HarmonyLib;
 using LethalLevelLoader.Tools;
-using LethalLib.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Security.Cryptography;
 using System.Text;
 using TMPro;
 using Unity.Netcode;
@@ -102,14 +103,23 @@ namespace LethalLevelLoader
                         if (networkPrefab.Prefab.GetComponent<AudioSource>() != null)
                             OriginalContent.AudioMixers.Add(networkPrefab.Prefab.GetComponent<AudioSource>().outputAudioMixerGroup.audioMixer);
 
-                GameObject networkManagerPrefab = LethalLib.Modules.NetworkPrefabs.CreateNetworkPrefab("LethalLevelLoaderNetworkManagerTest");
+                var name = "LethalLevelLoaderNetworkManagerTest";
+                var networkManagerPrefab = new GameObject(name);
+                networkManagerPrefab.hideFlags = HideFlags.HideAndDontSave;
+                networkManagerPrefab.AddComponent<NetworkObject>();
+
+                var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(Assembly.GetCallingAssembly().GetName().Name + name));
+
+                networkManagerPrefab.GetComponent<NetworkObject>().GlobalObjectIdHash = BitConverter.ToUInt32(hash, 0);
+
                 networkManagerPrefab.AddComponent<LethalLevelLoaderNetworkManager>();
                 networkManagerPrefab.GetComponent<NetworkObject>().DontDestroyWithOwner = true;
                 networkManagerPrefab.GetComponent<NetworkObject>().SceneMigrationSynchronization = true;
                 networkManagerPrefab.GetComponent<NetworkObject>().DestroyWithScene = false;
                 GameObject.DontDestroyOnLoad(networkManagerPrefab);
                 LethalLevelLoaderNetworkManager.networkingManagerPrefab = networkManagerPrefab;
-              
+                NetworkManager.Singleton.AddNetworkPrefab(networkManagerPrefab);
+
                 AssetBundleLoader.RegisterCustomContent(__instance.GetComponent<NetworkManager>());
                 LethalLevelLoaderNetworkManager.RegisterPrefabs(__instance.GetComponent<NetworkManager>());
             }
@@ -355,26 +365,6 @@ namespace LethalLevelLoader
             }
             else
                 RoundManager.Instance.GenerateNewFloor();
-        }
-
-        [HarmonyPriority(harmonyPriority)]
-        [HarmonyPatch(typeof(LethalLib.Modules.Dungeon), "RoundManager_Start")]
-        [HarmonyPrefix]
-        internal static bool Dungeon_Start_Prefix(On.RoundManager.orig_Start orig, RoundManager self)
-        {
-            DebugHelper.LogWarning("Disabling LethalLib Dungeon.RoundManager_Start() Function To Prevent Conflicts");
-            orig(self);
-            return (false);
-        }
-
-        [HarmonyPriority(harmonyPriority)]
-        [HarmonyPatch(typeof(LethalLib.Modules.Dungeon), "RoundManager_GenerateNewFloor")]
-        [HarmonyPrefix]
-        internal static bool Dungeon_GenerateNewFloor_Prefix(On.RoundManager.orig_GenerateNewFloor orig, RoundManager self)
-        {
-            DebugHelper.LogWarning("Disabling LethalLib Dungeon.RoundManager_GenerateNewFloor() Function To Prevent Conflicts");
-            orig(self);
-            return (false);
         }
     }
 }

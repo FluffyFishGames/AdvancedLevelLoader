@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using DunGen;
 using HarmonyLib;
+using LethalLevelLoader.General;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -14,10 +15,10 @@ using UnityEngine.SceneManagement;
 namespace LethalLevelLoader
 {
     [BepInPlugin(ModGUID, ModName, ModVersion)]
-    [BepInDependency(LethalLib.Plugin.ModGUID)]
+    [BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.SoftDependency)]
     internal class Plugin : BaseUnityPlugin
     {
-        public const string ModGUID = "imabatby.lethallevelloader";
+        public const string ModGUID = "potatoepet.lethallevelloader";
         public const string ModName = "LethalLevelLoader";
         public const string ModVersion = "1.1.0.6";
 
@@ -45,6 +46,9 @@ namespace LethalLevelLoader
             Harmony.PatchAll(typeof(DungeonLoader));
 
             Harmony.PatchAll(typeof(Patches));
+            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("LethalLib") || BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("evaisa.lethallib"))
+                Harmony.PatchAll(typeof(LethalLibPatches));
+
             Harmony.PatchAll(typeof(EventPatches));
             NetworkScenePatcher.Patch();
 
