@@ -84,6 +84,7 @@ namespace LethalLevelLoader
         {
             if (node != null && string.IsNullOrEmpty(node.terminalEvent) == false)
             {
+                if (node.terminalEvent == "switchCamera") return true;
                 //DebugHelper.Log("Running LLL Terminal Event: " + node.terminalEvent + "| EnumValue: " + GetTerminalEventEnum(node.terminalEvent) + " | StringValue: " + GetTerminalEventString(node.terminalEvent));
                 if (node.name.Contains("preview") && Enum.TryParse(typeof(PreviewInfoType), GetTerminalEventEnum(node.terminalEvent), out object previewEnumValue))
                     Settings.levelPreviewInfoType = (PreviewInfoType)previewEnumValue;

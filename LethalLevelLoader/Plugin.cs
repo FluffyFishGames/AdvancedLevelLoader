@@ -16,11 +16,12 @@ namespace LethalLevelLoader
 {
     [BepInPlugin(ModGUID, ModName, ModVersion)]
     [BepInDependency("evaisa.lethallib", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.potatoepet.AdvancedCompany", BepInDependency.DependencyFlags.HardDependency)]
     internal class Plugin : BaseUnityPlugin
     {
-        public const string ModGUID = "potatoepet.lethallevelloader";
+        public const string ModGUID = "imabatby.lethallevelloader";
         public const string ModName = "LethalLevelLoader";
-        public const string ModVersion = "1.1.0.6";
+        public const string ModVersion = "1.999.0.0";
 
         public static Plugin Instance;
 

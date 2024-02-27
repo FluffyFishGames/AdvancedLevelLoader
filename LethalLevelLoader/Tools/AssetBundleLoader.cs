@@ -85,7 +85,7 @@ namespace LethalLevelLoader
             Instance = new AssetBundleLoader();
 
             lethalLibFolder = lethalLibFile.Parent;
-            pluginsFolder = lethalLibFile.Parent.Parent;
+            pluginsFolder = new DirectoryInfo(BepInEx.Paths.PluginPath);
 
             int counter = 0;
             foreach (string file in Directory.GetFiles(pluginsFolder.FullName, specifiedFileExtension, SearchOption.AllDirectories))
