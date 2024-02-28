@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -96,13 +97,10 @@ namespace LethalLevelLoader
             if (levelType == ContentType.Custom)
                 levelTags.Add("Custom");
 
-            if (isLethalExpansion == false)
-                SetLevelID();
-
-            if (generateTerminalAssets == true) //Needs to be after levelID setting above.
+            if (generateTerminalAssets == true)
             {
                 //DebugHelper.Log("Generating Terminal Assets For: " + NumberlessPlanetName);
-                TerminalManager.CreateLevelTerminalData(this, routePrice);
+                TerminalManager.GatherOrCreateLevelTerminalData(this);
             }
 
             if (levelType == ContentType.Custom)
@@ -112,24 +110,31 @@ namespace LethalLevelLoader
             }
         }
 
+        internal static Regex NonLettersRegex = new Regex("[^a-zA-Z]");
+        /// <summary>
+        /// Returns the name of the planet without the number
+        /// </summary>
+        /// <param name="selectableLevel">The level to return the name for</param>
+        /// <returns>Name without number</returns>
         internal static string GetNumberlessPlanetName(SelectableLevel selectableLevel)
         {
             if (selectableLevel != null)
-                return new string(selectableLevel.PlanetName.SkipWhile(c => !char.IsLetter(c)).ToArray());
+                return NonLettersRegex.Replace(selectableLevel.PlanetName, "");
             else
                 return string.Empty;
         }
 
-        internal void SetLevelID()
+        /// <summary>
+        /// Changes the ID of the level and reflect that change to terminal keywords as well
+        /// </summary>
+        /// <param name="id">New ID for the level</param>
+        internal void SetLevelID(int id)
         {
-            if (levelType == ContentType.Custom)
-            {
-                selectableLevel.levelID = PatchedContent.ExtendedLevels.IndexOf(this);
-                if (routeNode != null)
-                    routeNode.displayPlanetInfo = selectableLevel.levelID;
-                if (routeConfirmNode != null)
-                    routeConfirmNode.buyRerouteToMoon = selectableLevel.levelID;
-            }
+            selectableLevel.levelID = id;
+            if (routeNode != null)
+                routeNode.displayPlanetInfo = selectableLevel.levelID;
+            if (routeConfirmNode != null)
+                routeConfirmNode.buyRerouteToMoon = selectableLevel.levelID;
         }
     }
         

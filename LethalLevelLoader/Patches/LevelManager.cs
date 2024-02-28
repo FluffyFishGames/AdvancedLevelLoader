@@ -36,7 +36,7 @@ namespace LethalLevelLoader
             List<SelectableLevel> vanillaLevelsList = new List<SelectableLevel>(OriginalContent.SelectableLevels);
             List<SelectableLevel> vanillaMoonsCatalogueList = new List<SelectableLevel>(OriginalContent.MoonsCatalogue);
             List<SelectableLevel> startOfRoundLevelsList = new List<SelectableLevel>(StartOfRound.Instance.levels);
-
+            
             foreach (SelectableLevel level in new List<SelectableLevel>(vanillaLevelsList))
                 if (level.levelID > 8)
                     vanillaLevelsList.Remove(level);
@@ -48,7 +48,7 @@ namespace LethalLevelLoader
             foreach (SelectableLevel level in new List<SelectableLevel>(startOfRoundLevelsList))
                 if (level.levelID > 8)
                     startOfRoundLevelsList.Remove(level);
-
+            
             OriginalContent.SelectableLevels = vanillaLevelsList;
             OriginalContent.MoonsCatalogue = vanillaMoonsCatalogueList;
 
@@ -67,9 +67,9 @@ namespace LethalLevelLoader
                 if (level.isLethalExpansion == true)
                     level.SetLevelID();*/
 
-            foreach (ExtendedLevel level in new List<ExtendedLevel>(PatchedContent.CustomExtendedLevels))
+            /*foreach (ExtendedLevel level in new List<ExtendedLevel>(PatchedContent.CustomExtendedLevels))
                 if (level.isLethalExpansion == false)
-                    level.SetLevelID();
+                    level.SetLevelID();*/
         }
 
         internal static void RefreshLethalExpansionMoons()

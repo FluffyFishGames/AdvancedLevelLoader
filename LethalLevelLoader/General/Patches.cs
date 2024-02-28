@@ -106,16 +106,15 @@ namespace LethalLevelLoader
                 var name = "LethalLevelLoaderNetworkManagerTest";
                 var networkManagerPrefab = new GameObject(name);
                 networkManagerPrefab.hideFlags = HideFlags.HideAndDontSave;
-                networkManagerPrefab.AddComponent<NetworkObject>();
-
-                var hash = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(Assembly.GetCallingAssembly().GetName().Name + name));
-
-                networkManagerPrefab.GetComponent<NetworkObject>().GlobalObjectIdHash = BitConverter.ToUInt32(hash, 0);
-
                 networkManagerPrefab.AddComponent<LethalLevelLoaderNetworkManager>();
-                networkManagerPrefab.GetComponent<NetworkObject>().DontDestroyWithOwner = true;
-                networkManagerPrefab.GetComponent<NetworkObject>().SceneMigrationSynchronization = true;
-                networkManagerPrefab.GetComponent<NetworkObject>().DestroyWithScene = false;
+
+                var networkObject = networkManagerPrefab.AddComponent<NetworkObject>();
+
+                networkObject.DontDestroyWithOwner = true;
+                networkObject.SceneMigrationSynchronization = true;
+                networkObject.DestroyWithScene = false;
+                networkObject.GlobalObjectIdHash = BitConverter.ToUInt32(MD5.Create().ComputeHash(System.Text.Encoding.UTF8.GetBytes(name)), 0);
+
                 GameObject.DontDestroyOnLoad(networkManagerPrefab);
                 LethalLevelLoaderNetworkManager.networkingManagerPrefab = networkManagerPrefab;
                 NetworkManager.Singleton.AddNetworkPrefab(networkManagerPrefab);
