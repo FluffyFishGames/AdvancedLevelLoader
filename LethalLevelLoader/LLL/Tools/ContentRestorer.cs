@@ -45,7 +45,7 @@ namespace LethalLevelLoader.Tools
 
         internal static void RestoreVanillaLevelAssetReferences(ExtendedLevel extendedLevel)
         {
-            if (extendedLevel.isLethalExpansion == true) return;
+            if (extendedLevel.isOtherModded == true) return;
 
             foreach (SpawnableItemWithRarity spawnableItem in extendedLevel.selectableLevel.spawnableScrap)
                 foreach (Item vanillaItem in OriginalContent.Items)

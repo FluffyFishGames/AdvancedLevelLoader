@@ -1,4 +1,5 @@
-﻿using DunGen;
+﻿using AdvancedLevelLoader;
+using DunGen;
 using DunGen.Graph;
 using HarmonyLib;
 using System.Collections;
@@ -183,7 +184,7 @@ namespace LethalLevelLoader
                 {
                     //DebugHelper.Log(extendedLevel.selectableLevel.PlanetName);
                     extendedLevel.levelType = ContentType.Custom;
-                    extendedLevel.Initialize(extendedLevel.name, generateTerminalAssets: true);
+                    extendedLevel.Initialize();
                     PatchedContent.ExtendedLevels.Add(extendedLevel);
                 }
                 //WarmUpBundleShaders(extendedLevel);
@@ -200,7 +201,8 @@ namespace LethalLevelLoader
         public static void RegisterExtendedLevel(ExtendedLevel extendedLevel)
         {
             DebugHelper.LogWarning("AssetBundleLoader.RegisterExtendedLevel() is deprecated. Please move to PatchedContent.RegisterExtendedLevel() to prevent issues in following updates.");
-            PatchedContent.RegisterExtendedLevel(extendedLevel);
+            var level = ExtendedSelectableLevel.GetOrCreate(extendedLevel);
+            level.Initialize();
         }
 
         internal static void CreateVanillaExtendedLevels(StartOfRound startOfRound)
@@ -209,18 +211,7 @@ namespace LethalLevelLoader
 
             foreach (SelectableLevel selectableLevel in startOfRound.levels)
             {
-                ExtendedLevel extendedLevel = ExtendedLevel.Create(selectableLevel, ContentType.Vanilla);
-
-                foreach (CompatibleNoun compatibleRouteNoun in TerminalManager.routeKeyword.compatibleNouns)
-                    if (compatibleRouteNoun.noun.name.Contains(ExtendedLevel.GetNumberlessPlanetName(selectableLevel)))
-                    {
-                        extendedLevel.routeNode = compatibleRouteNoun.result;
-                        extendedLevel.routeConfirmNode = compatibleRouteNoun.result.terminalOptions[1].result;
-                        extendedLevel.RoutePrice = compatibleRouteNoun.result.itemCost;
-                        break;
-                    }
-                extendedLevel.Initialize("Lethal Company", generateTerminalAssets: false);
-
+                ExtendedLevel extendedLevel = ExtendedLevel.GetOrCreate(selectableLevel, ContentType.Vanilla);
                 SetVanillaLevelTags(extendedLevel);
                 PatchedContent.ExtendedLevels.Add(extendedLevel);
             }

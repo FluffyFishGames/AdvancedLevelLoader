@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AdvancedLevelLoader;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,15 @@ namespace LethalLevelLoader
         {
             get
             {
-                ExtendedLevel returnLevel = null;
-                if (StartOfRound.Instance != null)
-                    if (TryGetExtendedLevel(StartOfRound.Instance.currentLevel, out ExtendedLevel level))
-                        returnLevel = level;
-                return returnLevel;
+                return ExtendedSelectableLevel.GetOrCreate(StartOfRound.Instance.currentLevel).LethalLevelLoaderLevel;
+            }
+        }
+
+        public static ExtendedSelectableLevel CurrentLevel
+        {
+            get
+            {
+                return ExtendedSelectableLevel.GetOrCreate(StartOfRound.Instance.currentLevel);
             }
         }
 
@@ -31,8 +36,28 @@ namespace LethalLevelLoader
 
         public static int invalidSaveLevelID = -1;
 
-        internal static void ValidateLevelLists()
+        internal static void ExpandLevelList()
         {
+            var startOfRoundLevels = StartOfRound.Instance.levels.ToList();
+            var terminalLevels = TerminalManager.Terminal.moonsCatalogueList.ToList();
+
+            for (var i = 0; i < PatchedContent.CustomExtendedLevels.Count; i++)
+            {
+                var level = PatchedContent.CustomExtendedLevels[i];
+                startOfRoundLevels.Add(level.selectableLevel);
+                terminalLevels.Add(level.selectableLevel);
+            }
+
+            // set correct ids
+            for (var i = 0; i < startOfRoundLevels.Count; i++)
+            {
+                var extendedLevel = ExtendedLevel.GetOrCreate(startOfRoundLevels[i]);
+                extendedLevel.SetLevelID(i);
+            }
+
+            StartOfRound.Instance.levels = startOfRoundLevels.ToArray();
+            TerminalManager.Terminal.moonsCatalogueList = terminalLevels.ToArray();
+            /*
             List<SelectableLevel> vanillaLevelsList = new List<SelectableLevel>(OriginalContent.SelectableLevels);
             List<SelectableLevel> vanillaMoonsCatalogueList = new List<SelectableLevel>(OriginalContent.MoonsCatalogue);
             List<SelectableLevel> startOfRoundLevelsList = new List<SelectableLevel>(StartOfRound.Instance.levels);
@@ -52,13 +77,13 @@ namespace LethalLevelLoader
             OriginalContent.SelectableLevels = vanillaLevelsList;
             OriginalContent.MoonsCatalogue = vanillaMoonsCatalogueList;
 
-            PatchVanillaLevelLists();
+            PatchVanillaLevelLists();*/
         }
 
         internal static void PatchVanillaLevelLists()
         {
-            StartOfRound.Instance.levels = PatchedContent.SeletectableLevels.ToArray();
-            TerminalManager.Terminal.moonsCatalogueList = PatchedContent.MoonsCatalogue.ToArray();
+            /*StartOfRound.Instance.levels = PatchedContent.SeletectableLevels.ToArray();
+            TerminalManager.Terminal.moonsCatalogueList = PatchedContent.MoonsCatalogue.ToArray();*/
         }
 
         internal static void RefreshCustomExtendedLevelIDs()
@@ -74,6 +99,7 @@ namespace LethalLevelLoader
 
         internal static void RefreshLethalExpansionMoons()
         {
+            /*
             foreach (ExtendedLevel extendedLevel in PatchedContent.CustomExtendedLevels)
                 if (extendedLevel.isLethalExpansion == true)
                 {
@@ -87,7 +113,7 @@ namespace LethalLevelLoader
                         }
                 }
 
-            RefreshCustomExtendedLevelIDs();
+            RefreshCustomExtendedLevelIDs();*/
         }
 
         public static bool TryGetExtendedLevel(SelectableLevel selectableLevel, out ExtendedLevel returnExtendedLevel, ContentType levelType = ContentType.Any)

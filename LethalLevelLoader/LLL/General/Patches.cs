@@ -192,7 +192,7 @@ namespace LethalLevelLoader
             foreach (AudioSource audioSource in Resources.FindObjectsOfTypeAll<AudioSource>())
                 audioSource.spatialize = false;
 
-            LevelManager.ValidateLevelLists();
+            LevelManager.ExpandLevelList();
             LevelManager.PatchVanillaLevelLists();
             DungeonManager.PatchVanillaDungeonLists();
             LevelManager.RefreshCustomExtendedLevelIDs();
@@ -285,7 +285,7 @@ namespace LethalLevelLoader
         internal static void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             if (LevelManager.CurrentExtendedLevel != null && LevelManager.CurrentExtendedLevel.IsLoaded)
-                if (LevelManager.CurrentExtendedLevel.levelType == ContentType.Custom && LevelManager.CurrentExtendedLevel.isLethalExpansion == false)
+                if (LevelManager.CurrentExtendedLevel.levelType == ContentType.Custom && LevelManager.CurrentExtendedLevel.isOtherModded == false)
                     foreach (GameObject rootObject in SceneManager.GetSceneByName(LevelManager.CurrentExtendedLevel.selectableLevel.sceneName).GetRootGameObjects())
                     {
                         LevelLoader.UpdateStoryLogs(LevelManager.CurrentExtendedLevel, rootObject);
