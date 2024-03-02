@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AdvancedLevelLoader;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -287,12 +288,12 @@ namespace LethalLevelLoader
             return (returnString);
         }
 
-        internal static string GetOffsetExtendedLevelName(ExtendedLevel extendedLevel)
+        internal static string GetOffsetExtendedLevelName(ExtendedSelectableLevel extendedLevel)
         {
             int longestLevelName = 0;
             string returnString = string.Empty;
 
-            foreach (ExtendedLevel currentExtendedLevel in currentMoonsCataloguePage.ExtendedLevels)
+            foreach (ExtendedSelectableLevel currentExtendedLevel in ExtendedSelectableLevel.AllLevels.Values)
             {
                 if (currentExtendedLevel.NumberlessPlanetName.Length > longestLevelName)
                     longestLevelName = currentExtendedLevel.NumberlessPlanetName.Length;
@@ -352,7 +353,7 @@ namespace LethalLevelLoader
             RefreshExtendedLevelGroups();
         }
 
-        internal static void GatherOrCreateLevelTerminalData(ExtendedLevel extendedLevel)
+        internal static void GatherOrCreateLevelTerminalData(ExtendedSelectableLevel extendedLevel)
         {
             // first we'll try to get already existing nodes for this planet (applies mostly to vanilla moons)
             TerminalKeyword terminalKeyword = null;
@@ -362,7 +363,7 @@ namespace LethalLevelLoader
             for (var i = 0; i < routeKeyword.compatibleNouns.Length; i++)
             {
                 var noun = routeKeyword.compatibleNouns[i];
-                if (noun.result.displayPlanetInfo == extendedLevel.selectableLevel.levelID)
+                if (noun.result.displayPlanetInfo == extendedLevel.SelectableLevel.levelID)
                 {
                     terminalKeyword = noun.noun;
                     terminalNodeRoute = noun.result;
@@ -393,9 +394,9 @@ namespace LethalLevelLoader
             {
                 terminalNodeRouteConfirm = CreateNewTerminalNode();
                 terminalNodeRouteConfirm.name = extendedLevel.NumberlessPlanetName.StripSpecialCharacters().Sanitized() + "RouteConfirm";
-                terminalNodeRouteConfirm.displayText = "Routing autopilot to " + extendedLevel.selectableLevel.PlanetName + " Your new balance is [playerCredits].";
+                terminalNodeRouteConfirm.displayText = "Routing autopilot to " + extendedLevel.SelectableLevel.PlanetName + " Your new balance is [playerCredits].";
                 terminalNodeRouteConfirm.clearPreviousText = true;
-                terminalNodeRouteConfirm.buyRerouteToMoon = extendedLevel.selectableLevel.levelID;
+                terminalNodeRouteConfirm.buyRerouteToMoon = extendedLevel.SelectableLevel.levelID;
                 terminalNodeRouteConfirm.itemCost = 0; // set to 0 for now. This will be managed by AC.
             }
 
@@ -403,11 +404,11 @@ namespace LethalLevelLoader
             {
                 terminalNodeRoute = TerminalNode.CreateInstance<TerminalNode>();
                 terminalNodeRoute.name = extendedLevel.NumberlessPlanetName.StripSpecialCharacters().Sanitized() + "Route";
-                terminalNodeRoute.displayText = "The cost to route to " + extendedLevel.selectableLevel.PlanetName + " is [totalCost]. It is currently [currentPlanetTime] on this moon.";
+                terminalNodeRoute.displayText = "The cost to route to " + extendedLevel.SelectableLevel.PlanetName + " is [totalCost]. It is currently [currentPlanetTime] on this moon.";
                 terminalNodeRoute.displayText += "\n" + "\n" + "Please CONFIRM or DENY." + "\n" + "\n";
                 terminalNodeRoute.clearPreviousText = true;
                 terminalNodeRoute.buyRerouteToMoon = -2;
-                terminalNodeRoute.displayPlanetInfo = extendedLevel.selectableLevel.levelID;
+                terminalNodeRoute.displayPlanetInfo = extendedLevel.SelectableLevel.levelID;
                 terminalNodeRoute.itemCost = 0; // set to 0 for now. This will be managed by AC.
                 terminalNodeRoute.overrideOptions = true;
                 terminalNodeRoute.AddCompatibleNoun(denyKeyword, cancelRouteNode);
@@ -420,14 +421,14 @@ namespace LethalLevelLoader
                 terminalNodeInfo.clearPreviousText = true;
                 terminalNodeInfo.maxCharactersToType = 35;
 
-                string infoString = extendedLevel.selectableLevel.PlanetName + "\n" + "----------------------" + "\n";
+                string infoString = extendedLevel.SelectableLevel.PlanetName + "\n" + "----------------------" + "\n";
                 List<string> selectableLevelLines = new List<string>();
 
                 string inputString;
-                if (extendedLevel.infoNodeDescripton != string.Empty)
-                    inputString = extendedLevel.infoNodeDescripton;
+                if (extendedLevel.InfoNodeDescription != string.Empty)
+                    inputString = extendedLevel.InfoNodeDescription;
                 else
-                    inputString = extendedLevel.selectableLevel.LevelDescription;
+                    inputString = extendedLevel.SelectableLevel.LevelDescription;
 
                 while (inputString.Contains("\n"))
                 {
@@ -454,12 +455,12 @@ namespace LethalLevelLoader
                 infoKeyword.AddCompatibleNoun(terminalKeyword, terminalNodeInfo);
             }
 
-            extendedLevel.routeNode = terminalNodeRoute;
-            extendedLevel.routeConfirmNode = terminalNodeRouteConfirm;
-            extendedLevel.infoNode = terminalNodeInfo;
+            extendedLevel.RouteNode = terminalNodeRoute;
+            extendedLevel.RouteConfirmNode = terminalNodeRouteConfirm;
+            extendedLevel.InfoNode = terminalNodeInfo;
 
             // search for story logs entries and create them if missing
-            foreach (StoryLogData newStoryLog in extendedLevel.storyLogs)
+            foreach (StoryLogData newStoryLog in extendedLevel.StoryLogs)
             {
                 if (newStoryLog.terminalWord != string.Empty && newStoryLog.storyLogTitle != string.Empty && newStoryLog.storyLogDescription != string.Empty)
                 {

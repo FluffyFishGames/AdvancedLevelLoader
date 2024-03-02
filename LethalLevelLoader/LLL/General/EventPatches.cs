@@ -1,4 +1,5 @@
-﻿using DunGen;
+﻿using AdvancedLevelLoader;
+using DunGen;
 using GameNetcodeStuff;
 using HarmonyLib;
 using System;
@@ -20,8 +21,8 @@ namespace LethalLevelLoader
 
         internal static void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            if (LevelManager.CurrentExtendedLevel != null && LevelManager.CurrentExtendedLevel.IsLoaded)
-                    LevelManager.CurrentExtendedLevel.levelEvents.onLevelLoaded.Invoke();
+            if (LevelManager.CurrentLevel != null && LevelManager.CurrentLevel.IsLoaded)
+                LevelManager.CurrentLevel.LevelEvents.onLevelLoaded.Invoke();
         }
 
         [HarmonyPriority(Patches.harmonyPriority)]
@@ -144,6 +145,7 @@ namespace LethalLevelLoader
         [HarmonyPrefix]
         internal static void EntranceTeleportTeleportPlayerServerRpc_Prefix(EntranceTeleport __instance)
         {
+            
             if (DungeonManager.CurrentExtendedDungeonFlow != null)
             {
                 PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;

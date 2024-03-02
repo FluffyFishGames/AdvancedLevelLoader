@@ -36,6 +36,7 @@ namespace AdvancedLevelLoader
                     _LethalLevelLoaderLevel.levelTags = LevelTags;
                     _LethalLevelLoaderLevel.levelType = ContentType.Custom;
                     _LethalLevelLoaderLevel.storyLogs = StoryLogs;
+                    _LethalLevelLoaderLevel.infoNodeDescripton = InfoNodeDescription;
                     _LethalLevelLoaderLevel.allowedDungeonContentTypes = ContentType.Any;
                 }
                 return _LethalLevelLoaderLevel;
@@ -52,6 +53,7 @@ namespace AdvancedLevelLoader
         public TerminalNode RouteNode;
         public TerminalNode RouteConfirmNode;
         public TerminalNode InfoNode;
+        public string InfoNodeDescription;
         public LevelEvents LevelEvents = new LevelEvents();
 
         public bool IsLoaded => SceneManager.GetSceneByName(SelectableLevel.sceneName).isLoaded;
@@ -65,12 +67,13 @@ namespace AdvancedLevelLoader
                 var extendedLevel = ScriptableObject.CreateInstance<ExtendedSelectableLevel>();
                 extendedLevel.LevelType = ContentType.LethalLevelLoader;
                 extendedLevel.SelectableLevel = level.selectableLevel;
+                extendedLevel.InfoNodeDescription = level.infoNodeDescripton;
                 extendedLevel.LevelEvents = level.levelEvents;
                 extendedLevel.StoryLogs = level.storyLogs;
                 extendedLevel.Initialize();
-                AllLevels[level] = extendedLevel;
+                AllLevels[level.selectableLevel] = extendedLevel;
             }
-            return AllLevels[level];
+            return AllLevels[level.selectableLevel];
         }
 
         internal static ExtendedSelectableLevel GetOrCreate(SelectableLevel level, ContentType newContentType = ContentType.Vanilla)
