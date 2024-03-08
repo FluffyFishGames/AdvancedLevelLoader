@@ -33,6 +33,30 @@ namespace LethalLevelLoader
 
         internal static void ValidateLevelLists()
         {
+            /*
+            // remove old LE levels
+            for (var i = 0; i < PatchedContent.ExtendedLevels.Count; i++)
+            {
+                if (PatchedContent.ExtendedLevels[i].isLethalExpansion)
+                {
+                    PatchedContent.ExtendedLevels.RemoveAt(i);
+                    i--;
+                }
+            }
+            // scan for added levels
+            for (var i = 0; i < StartOfRound.Instance.levels.Length; i++)
+            {
+                var extended = LevelManager.GetExtendedLevel(StartOfRound.Instance.levels[i]);
+                if (extended == null)
+                {
+                    extended = ExtendedLevel.CreateInstance<ExtendedLevel>();
+                    extended.selectableLevel = StartOfRound.Instance.levels[i];
+                    extended.Initialize("Other", true);
+                    Plugin.logger.LogInfo("Found other moon " + extended.selectableLevel.PlanetName);
+                    PatchedContent.ExtendedLevels.Add(extended);
+                }
+            }
+            */
             List<SelectableLevel> vanillaLevelsList = new List<SelectableLevel>(OriginalContent.SelectableLevels);
             List<SelectableLevel> vanillaMoonsCatalogueList = new List<SelectableLevel>(OriginalContent.MoonsCatalogue);
             List<SelectableLevel> startOfRoundLevelsList = new List<SelectableLevel>(StartOfRound.Instance.levels);
@@ -57,6 +81,19 @@ namespace LethalLevelLoader
 
         internal static void PatchVanillaLevelLists()
         {
+            // set level ids
+            for (var i = 0; i < PatchedContent.ExtendedLevels.Count; i++)
+            {
+                if (i > 8)
+                {
+                    Plugin.logger.LogInfo("Set moon " + PatchedContent.ExtendedLevels[i].selectableLevel.PlanetName + " to ID " + i);
+
+                    PatchedContent.ExtendedLevels[i].selectableLevel.levelID = i;
+                    PatchedContent.ExtendedLevels[i].infoNode.displayPlanetInfo = i;
+                    PatchedContent.ExtendedLevels[i].routeNode.displayPlanetInfo = i;
+                    PatchedContent.ExtendedLevels[i].routeConfirmNode.buyRerouteToMoon = i;
+                }
+            }
             StartOfRound.Instance.levels = PatchedContent.SeletectableLevels.ToArray();
             TerminalManager.Terminal.moonsCatalogueList = PatchedContent.MoonsCatalogue.ToArray();
         }

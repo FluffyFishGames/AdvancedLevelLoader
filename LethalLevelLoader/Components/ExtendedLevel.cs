@@ -27,6 +27,8 @@ namespace LethalLevelLoader
             {
                 if (routeNode != null)
                 {
+                    routePrice = routeNode.itemCost;
+                    routeConfirmNode.itemCost = routePrice;
                     return AdvancedCompany.Lib.Moons.GetMoonPrice(routeConfirmNode.buyRerouteToMoon);
 //                    routePrice = routeNode.itemCost;
 //                    routeConfirmNode.itemCost = routePrice;
@@ -102,7 +104,7 @@ namespace LethalLevelLoader
             if (generateTerminalAssets == true) //Needs to be after levelID setting above.
             {
                 //DebugHelper.Log("Generating Terminal Assets For: " + NumberlessPlanetName);
-                TerminalManager.CreateLevelTerminalData(this, routePrice);
+                TerminalManager.GatherOrCreateLevelTerminalData(this);
             }
 
             if (levelType == ContentType.Custom)
