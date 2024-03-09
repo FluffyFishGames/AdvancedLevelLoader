@@ -35,7 +35,7 @@ namespace LethalLevelLoader.Tools
                 ExtendedDungeonConfig newConfig = new ExtendedDungeonConfig(newConfigFile, "Custom Dungeon: " + (PatchedContent.CustomExtendedDungeonFlows.IndexOf(extendedDungeonFlow) + 1).ToString() + ". - " + extendedDungeonFlow.dungeonDisplayName.StripSpecialCharacters(), 9);
                 newConfig.BindConfigs(extendedDungeonFlow);
             }
-
+            /*
             foreach (ExtendedLevel extendedLevel in PatchedContent.VanillaExtendedLevels)
             {
                 ExtendedLevelConfig newConfig = new ExtendedLevelConfig(newConfigFile, "Vanilla Level: " + (PatchedContent.VanillaExtendedLevels.IndexOf(extendedLevel) + 1).ToString() + ". - " + extendedLevel.selectableLevel.PlanetName.StripSpecialCharacters(), 6);
@@ -47,7 +47,7 @@ namespace LethalLevelLoader.Tools
                 ExtendedLevelConfig newConfig = new ExtendedLevelConfig(newConfigFile, "Custom Level: " + (PatchedContent.CustomExtendedLevels.IndexOf(extendedLevel) + 1).ToString() + ". - " + extendedLevel.selectableLevel.PlanetName.StripSpecialCharacters(), 8);
                 newConfig.BindConfigs(extendedLevel);
             }
-
+            */
             if (debugLevelsString.Contains(", ") && debugLevelsString.LastIndexOf(", ") == (debugLevelsString.Length - 2))
                 debugLevelsString = debugLevelsString.Remove(debugLevelsString.LastIndexOf(", "), 2);
 
@@ -174,6 +174,7 @@ namespace LethalLevelLoader.Tools
         }
     }
 
+    /*
     public class ExtendedLevelConfig : ConfigTemplate
     {
         //General
@@ -318,6 +319,7 @@ namespace LethalLevelLoader.Tools
             return (returnString);
         }
     }
+    */
 
     public class ConfigTemplate
     {

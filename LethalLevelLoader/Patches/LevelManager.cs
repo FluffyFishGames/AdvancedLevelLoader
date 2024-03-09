@@ -87,11 +87,7 @@ namespace LethalLevelLoader
                 if (i > 8)
                 {
                     Plugin.logger.LogInfo("Set moon " + PatchedContent.ExtendedLevels[i].selectableLevel.PlanetName + " to ID " + i);
-
-                    PatchedContent.ExtendedLevels[i].selectableLevel.levelID = i;
-                    PatchedContent.ExtendedLevels[i].infoNode.displayPlanetInfo = i;
-                    PatchedContent.ExtendedLevels[i].routeNode.displayPlanetInfo = i;
-                    PatchedContent.ExtendedLevels[i].routeConfirmNode.buyRerouteToMoon = i;
+                    PatchedContent.ExtendedLevels[i].SetLevelID(i);
                 }
             }
             StartOfRound.Instance.levels = PatchedContent.SeletectableLevels.ToArray();

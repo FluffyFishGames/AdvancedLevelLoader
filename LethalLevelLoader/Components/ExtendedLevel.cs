@@ -26,19 +26,8 @@ namespace LethalLevelLoader
             get
             {
                 if (routeNode != null)
-                {
-                    routePrice = routeNode.itemCost;
-                    routeConfirmNode.itemCost = routePrice;
-                    return AdvancedCompany.Lib.Moons.GetMoonPrice(routeConfirmNode.buyRerouteToMoon);
-//                    routePrice = routeNode.itemCost;
-//                    routeConfirmNode.itemCost = routePrice;
-//                    return (routeNode.itemCost);
-                }
-                else
-                {
-                    DebugHelper.LogWarning("routeNode Is Missing! Using internal value!");
-                    return (routePrice);
-                }
+                    return AdvancedCompany.Lib.Moons.GetMoonPrice(routeNode.displayPlanetInfo, routePrice);
+                return routePrice;
             }
             set
             {
@@ -46,6 +35,16 @@ namespace LethalLevelLoader
                 routeConfirmNode.itemCost = value;
                 routePrice = value;
             }
+        }
+
+        public void SetLevelID(int levelID)
+        {
+            if (selectableLevel != null)
+                selectableLevel.levelID = levelID;
+            routeNode.displayPlanetInfo = levelID;
+            routeConfirmNode.buyRerouteToMoon = levelID; 
+            infoNode.displayPlanetInfo = levelID;
+            routeNode.itemCost = routePrice;
         }
 
         [Space(10)]
