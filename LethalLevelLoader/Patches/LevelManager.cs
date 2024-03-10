@@ -82,14 +82,27 @@ namespace LethalLevelLoader
         internal static void PatchVanillaLevelLists()
         {
             // set level ids
+            var levels = new List<ExtendedLevel>();
+            var usedIDs = new List<int>();
             for (var i = 0; i < PatchedContent.ExtendedLevels.Count; i++)
             {
-                if (i > 8)
-                {
-                    Plugin.logger.LogInfo("Set moon " + PatchedContent.ExtendedLevels[i].selectableLevel.PlanetName + " to ID " + i);
-                    PatchedContent.ExtendedLevels[i].SetLevelID(i);
-                }
+                if (i > 8 && PatchedContent.ExtendedLevels[i].selectableLevel != null)
+                    levels.Add(PatchedContent.ExtendedLevels[i]);
+                else
+                    usedIDs.Add(i);
             }
+            levels = levels.OrderBy((x) => x.selectableLevel.PlanetName).ToList();
+
+            var currID = 0;
+            for (var i = 0; i < levels.Count; i++)
+            {
+                while (usedIDs.Contains(currID))
+                    currID++;
+                levels[i].SetLevelID(currID);
+                Plugin.logger.LogMessage("Changed ID of moon " + levels[i].selectableLevel.PlanetName + " to " + currID);
+                currID++;
+            }
+
             StartOfRound.Instance.levels = PatchedContent.SeletectableLevels.ToArray();
             TerminalManager.Terminal.moonsCatalogueList = PatchedContent.MoonsCatalogue.ToArray();
         }

@@ -438,6 +438,7 @@ namespace LethalLevelLoader
 
             if (terminalNodeRouteConfirm == null)
             {
+                Plugin.logger.LogDebug("Creating route confirm node for " + extendedLevel.selectableLevel.PlanetName);
                 terminalNodeRouteConfirm = CreateNewTerminalNode();
                 terminalNodeRouteConfirm.name = extendedLevel.NumberlessPlanetName.StripSpecialCharacters().Sanitized() + "RouteConfirm";
                 terminalNodeRouteConfirm.displayText = "Routing autopilot to " + extendedLevel.selectableLevel.PlanetName + " Your new balance is [playerCredits].";
@@ -448,6 +449,7 @@ namespace LethalLevelLoader
 
             if (terminalNodeRoute == null)
             {
+                Plugin.logger.LogDebug("Creating route node for " + extendedLevel.selectableLevel.PlanetName);
                 terminalNodeRoute = CreateNewTerminalNode();
                 terminalNodeRoute.name = extendedLevel.NumberlessPlanetName.StripSpecialCharacters().Sanitized() + "Route";
                 terminalNodeRoute.displayText = "The cost to route to " + extendedLevel.selectableLevel.PlanetName + " is [totalCost]. It is currently [currentPlanetTime] on this moon.";
@@ -462,6 +464,7 @@ namespace LethalLevelLoader
             }
             if (terminalNodeInfo == null)
             {
+                Plugin.logger.LogDebug("Creating info node for " + extendedLevel.selectableLevel.PlanetName);
                 terminalNodeInfo = CreateNewTerminalNode();
                 terminalNodeInfo.name = extendedLevel.NumberlessPlanetName.StripSpecialCharacters().Sanitized() + "Info";
                 terminalNodeInfo.clearPreviousText = true;
@@ -493,6 +496,8 @@ namespace LethalLevelLoader
 
             if (terminalKeyword == null)
             {
+                Plugin.logger.LogDebug("Creating terminal keyword for " + extendedLevel.selectableLevel.PlanetName);
+
                 terminalKeyword = CreateNewTerminalKeyword();
                 terminalKeyword.name = extendedLevel.NumberlessPlanetName.StripSpecialCharacters().Sanitized() + "Keyword";
                 terminalKeyword.word = terminalWord;

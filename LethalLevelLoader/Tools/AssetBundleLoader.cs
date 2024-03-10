@@ -211,15 +211,15 @@ namespace LethalLevelLoader
             {
                 ExtendedLevel extendedLevel = ExtendedLevel.Create(selectableLevel, ContentType.Vanilla);
 
-                foreach (CompatibleNoun compatibleRouteNoun in TerminalManager.routeKeyword.compatibleNouns)
+                /*foreach (CompatibleNoun compatibleRouteNoun in TerminalManager.routeKeyword.compatibleNouns)
                     if (compatibleRouteNoun.noun.name.Contains(ExtendedLevel.GetNumberlessPlanetName(selectableLevel)))
                     {
                         extendedLevel.routeNode = compatibleRouteNoun.result;
                         extendedLevel.routeConfirmNode = compatibleRouteNoun.result.terminalOptions[1].result;
                         extendedLevel.RoutePrice = compatibleRouteNoun.result.itemCost;
                         break;
-                    }
-                extendedLevel.Initialize("Lethal Company", generateTerminalAssets: false);
+                    }*/
+                extendedLevel.Initialize("Lethal Company", generateTerminalAssets: true);
 
                 SetVanillaLevelTags(extendedLevel);
                 PatchedContent.ExtendedLevels.Add(extendedLevel);
